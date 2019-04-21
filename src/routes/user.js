@@ -1,10 +1,9 @@
 import passport from 'passport';
+import users from '../controllers/user';
+import config from '../config/config';
+import { allowOnly } from '../services/routesHelper';
 
 module.exports = app => {
-  const users = require('../controllers/user');
-  const config = require('../config/config');
-  const allowOnly = require('../services/routesHelper').allowOnly;
-
   // create a new user
   app.post(
     '/api/users/create',

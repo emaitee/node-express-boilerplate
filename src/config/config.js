@@ -1,5 +1,3 @@
-
-
 var config = module.exports;
 
 const userRoles = config.userRoles = {

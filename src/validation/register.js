@@ -1,7 +1,7 @@
 import Validator from 'validator';
 import isEmpty from './isEmpty';
 
-module.exports = function validateRegisterForm(data) {
+function validateRegisterForm(data) {
   let errors = {};
 
   data.firstname = !isEmpty(data.firstname) ? data.firstname : '';
@@ -56,3 +56,5 @@ module.exports = function validateRegisterForm(data) {
     isValid: isEmpty(errors),
   };
 };
+
+export default validateRegisterForm;

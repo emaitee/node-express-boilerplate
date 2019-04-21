@@ -1,7 +1,7 @@
 import Validator from 'validator';
 import isEmpty from './isEmpty';
 
-module.exports = function validateLoginForm(data) {
+function validateLoginForm(data) {
   let errors = {};
 
   data.email = !isEmpty(data.email) ? data.email : '';
@@ -24,3 +24,5 @@ module.exports = function validateLoginForm(data) {
     isValid: isEmpty(errors),
   };
 };
+
+export default validateLoginForm
