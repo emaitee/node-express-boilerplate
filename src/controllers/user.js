@@ -10,7 +10,7 @@ import validateRegisterForm from '../validation/register';
 import validateLoginForm from '../validation/login';
 
 // create user
-exports.create = (req, res) => {
+const create = (req, res) => {
   const { errors, isValid } = validateRegisterForm(req.body);
   let { 
     firstname, 
@@ -55,7 +55,7 @@ exports.create = (req, res) => {
   });
 };
 
-exports.login = (req, res) => {
+const login = (req, res) => {
   const { errors, isValid } = validateLoginForm(req.body);
 
   // check validation
@@ -109,7 +109,7 @@ exports.login = (req, res) => {
 };
 
 // fetch all users
-exports.findAllUsers = (req, res) => {
+const findAllUsers = (req, res) => {
   User.findAll()
     .then(user => {
       res.json({ user });
@@ -118,7 +118,7 @@ exports.findAllUsers = (req, res) => {
 };
 
 // fetch user by userId
-exports.findById = (req, res) => {
+const findById = (req, res) => {
   const id = req.params.userId;
   
   User.findAll({ where: { id } })
@@ -132,7 +132,7 @@ exports.findById = (req, res) => {
 };
 
 // update a user's info
-exports.update = (req, res) => {
+const update = (req, res) => {
   let { firstname, lastname, HospitalId, role, image } = req.body;
   const id = req.params.userId;
 
@@ -149,10 +149,19 @@ exports.update = (req, res) => {
 };
 
 // delete a user
-exports.delete = (req, res) => {
+const deleteUser = (req, res) => {
   const id = req.params.userId;
 
   User.destroy({ where: { id } })
     .then(() => res.status.json({ msg: 'User has been deleted successfully!' }))
     .catch(err => res.status(500).json({ msg: 'Failed to delete!' }));
 };
+
+export { 
+    create, 
+    login, 
+    findAllUsers, 
+    findById, 
+    update, 
+    deleteUser 
+}

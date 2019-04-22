@@ -1,18 +1,20 @@
 import passport from 'passport';
-import users from '../controllers/user';
 import config from '../config/config';
 import { allowOnly } from '../services/routesHelper';
+import { create, login, findAllUsers, 
+    findById, update, deleteUser
+} from '../controllers/user';
 
-module.exports = app => {
+module.exports = (app) => {
   // create a new user
   app.post(
     '/api/users/create',
     passport.authenticate('jwt', { session: false }),
-    allowOnly(config.accessLevels.admin, users.create)
+    allowOnly(config.accessLevels.admin, create)
   );
 
   // user login
-  app.post('/api/users/login', users.login);
+  app.post('/api/users/login', login);
 
   //retrieve all users
   app.get(
@@ -20,7 +22,7 @@ module.exports = app => {
     passport.authenticate('jwt', { 
       session: false 
     }),
-    allowOnly(config.accessLevels.admin, users.findAllUsers)
+    allowOnly(config.accessLevels.admin, findAllUsers)
   );
 
   // retrieve user by id
@@ -29,7 +31,7 @@ module.exports = app => {
     passport.authenticate('jwt', {
       session: false,
     }),
-    allowOnly(config.accessLevels.admin, users.findById)
+    allowOnly(config.accessLevels.admin, findById)
   );
 
   // update a user with id
@@ -38,7 +40,7 @@ module.exports = app => {
     passport.authenticate('jwt', {
       session: false,
     }),
-    allowOnly(config.accessLevels.user, users.update)
+    allowOnly(config.accessLevels.user, update)
   );
 
   // delete a user
@@ -47,7 +49,7 @@ module.exports = app => {
     passport.authenticate('jwt', {
       session: false,
     }),
-    allowOnly(config.accessLevels.admin, users.delete)
+    allowOnly(config.accessLevels.admin, deleteUser)
   );
 
 };
