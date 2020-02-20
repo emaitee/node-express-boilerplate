@@ -13,7 +13,15 @@
 ### To get started,
 
 - clone this repository
-- cd node-express-boilerplate
-- yarn install
-- add your database in src/config/config.json
-- yarn start
+- `cd node-express-boilerplate`
+- run `yarn install`
+- add your database in `src/config/config.json`
+- be sure to have `nodemon` installed
+- yarn run dev
+- if you don't have `nodemon` installed, change your `dev` script in package.json to `node --exec babel-node src/index.js`
+
+### To deploy to production,
+- run `yarn run build` to generate the build folder
+- upload the build server to your server
+
+## Contributions are welcomed

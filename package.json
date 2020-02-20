@@ -1,9 +1,14 @@
 {
-  "name": "meetup-connect",
+  "name": "node-express-boilerplate",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "babel-node index.js"
+    "clean": "rm -rf build && mkdir build",
+    "dev": "nodemon --exec babel-node src/index.js",
+    "build-server": "babel -d ./build ./src -s",
+    "build": "npm run clean && npm run build-server",
+    "start": "node ./build/index.js",
+    "debug": "node --debug ./build/index.js"
   },
   "license": "MIT",
   "dependencies": {

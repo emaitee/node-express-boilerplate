@@ -2,7 +2,7 @@ import express from 'express';
 import passport from 'passport';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import models from './src/models'
+import models from './models'
 
 const app = express();
 
@@ -35,12 +35,12 @@ models.sequelize.sync().then(() => {
 app.use(passport.initialize());
 
 // passport config
-require('./src/config/passport')(passport);
+require('./config/passport')(passport);
 
 //default route
 app.get('/', (req, res) => res.send('Hello my World'));
 
-require('./src/routes/user.js')(app);
+require('./routes/user.js')(app);
 
 //create a server
 var server = app.listen(port, function() {
