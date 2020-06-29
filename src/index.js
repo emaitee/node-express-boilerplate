@@ -17,12 +17,6 @@ app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
 
 
-// const corsOptions = {
-//   origin: 'http://localhost:8081',
-//   optionsSuccessStatus: 200,
-// };
-
-// app.use(cors(corsOptions));
 app.use(cors());
 
 // force: true will drop the table if it already exits
