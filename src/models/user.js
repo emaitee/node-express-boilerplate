@@ -2,19 +2,25 @@ export default (sequelize, DataTypes) => {
   const User = sequelize.define(
     'User',
     {
-      firstname: DataTypes.STRING,
-      lastname: DataTypes.STRING,
+      id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        primaryKey: true,
+        defaultValue: DataTypes.UUIDV4,
+      },
+      name: DataTypes.STRING,
       username: DataTypes.STRING,
       email: DataTypes.STRING,
       password: DataTypes.STRING,
-      role: DataTypes.STRING,
+      role: {
+        type: DataTypes.STRING,
+        defaultValue: '2',
+      },
+      agency: DataTypes.STRING,
+      department: DataTypes.STRING,
     },
-    {}
+    {},
   );
-
-  User.associate = function(models) {
-    // associations go here
-  };
 
   return User;
 };
