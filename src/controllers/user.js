@@ -12,37 +12,42 @@ import validateLoginForm from '../validation/login';
 // create user
 const create = (req, res) => {
   const { errors, isValid } = validateRegisterForm(req.body);
-  let { name, username, role, email, password } = req.body;
+  let { 
+    firstname, 
+    lastname, 
+    username, 
+    role,
+    email, 
+    password,
+  } = req.body;
 
   // check validation
-  if (!isValid) {
-    errors.success = false;
+  if(!isValid) {
     return res.status(400).json(errors);
   }
 
-  User.findAll({ where: { email } }).then((user) => {
+  User.findAll({ where: { email } }).then(user => {
     if (user.length) {
-      return res
-        .status(400)
-        .json({ success: false, email: 'Email already exists!' });
+      return res.status(400).json({ email: 'Email already exists!' });
     } else {
-      let newUser = {
-        name,
-        username,
-        role: role ? role : '2',
-        email,
-        password,
+      let newUser = { 
+        firstname, 
+        lastname, 
+        username, 
+        role,
+        email, 
+        password, 
       };
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(newUser.password, salt, (err, hash) => {
           if (err) throw err;
           newUser.password = hash;
           User.create(newUser)
-            .then((user) => {
-              res.json({ success: true, user });
+            .then(user => {
+              res.json({ user });
             })
-            .catch((err) => {
-              res.status(500).json({ success: false, err });
+            .catch(err => {
+              res.status(500).json({ err });
             });
         });
       });
@@ -54,113 +59,76 @@ const login = (req, res) => {
   const { errors, isValid } = validateLoginForm(req.body);
 
   // check validation
-  if (!isValid) {
+  if(!isValid) {
     return res.status(400).json(errors);
   }
 
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
-  User.findAll({
-    where: {
-      username,
-    },
+  User.findAll({ 
+    where: { 
+      email 
+    } 
   })
-    .then((user) => {
-      //check for user
-      if (!user.length) {
-        errors.username = 'User not found!';
-        errors.success = false;
-        return res.status(404).json(errors);
-      }
+  .then(user => {
 
-      let originalPassword = user[0].dataValues.password;
-
-      //check for password
-      bcrypt
-        .compare(password, originalPassword)
-        .then((isMatch) => {
-          if (isMatch) {
-            // user matched
-            console.log('matched!');
-            const { id, username, name, email } = user[0].dataValues;
-            const payload = { id, username, name, email }; //jwt payload
-            // console.log(payload)
-
-            jwt.sign(
-              payload,
-              'secret',
-              {
-                expiresIn: 3600,
-              },
-              (err, token) => {
-                res.json({
-                  success: true,
-                  token: 'Bearer ' + token,
-                  role: user[0].dataValues.role,
-                });
-              },
-            );
-          } else {
-            errors.password = 'Password not correct';
-            errors.success = false;
-            return res.status(400).json(errors);
-          }
-        })
-        .catch((err) => console.log(err));
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({ success: false, err });
-    });
-};
-
-const getUserProfile = (req, res) => {
-  const authToken = req.headers['authorization'];
-  const token = authToken.split(' ')[1];
-
-  jwt.verify(token, 'secret', (err, decoded) => {
-    if (err) {
-      return res.json({
-        success: false,
-        msg: 'Failed to authenticate token.',
-        err,
-      });
+    //check for user
+    if (!user.length) {
+      errors.email = 'User not found!';
+      return res.status(404).json(errors);
     }
+     
+    let originalPassword = user[0].dataValues.password
 
-    const { id, name, email, username } = decoded;
-    res.json({
-      success: true,
-      user: {
-        id,
-        name,
-        email,
-        username,
-      },
-    });
-  });
+    //check for password
+    bcrypt
+      .compare(password, originalPassword)
+      .then(isMatch => {
+        if (isMatch) {
+          // user matched
+          console.log('matched!')
+          const { id, username } = user[0].dataValues;
+          const payload = { id, username }; //jwt payload
+          // console.log(payload)
+
+          jwt.sign(payload, 'secret', { 
+            expiresIn: 3600 
+          }, (err, token) => {
+            res.json({
+              success: true,
+              token: 'Bearer ' + token,
+              role: user[0].dataValues.role
+            });
+          });
+        } else {
+          errors.password = 'Password not correct';
+          return res.status(400).json(errors);
+        }
+    }).catch(err => console.log(err));
+  }).catch(err => res.status(500).json({err}));
 };
 
 // fetch all users
 const findAllUsers = (req, res) => {
   User.findAll()
-    .then((user) => {
+    .then(user => {
       res.json({ user });
     })
-    .catch((err) => res.status(500).json({ err }));
+    .catch(err => res.status(500).json({ err }));
 };
 
 // fetch user by userId
 const findById = (req, res) => {
   const id = req.params.userId;
-
+  
   User.findAll({ where: { id } })
-    .then((user) => {
-      if (!user.length) {
-        return res.json({ msg: 'user not found' });
+    .then(user => {
+      if(!user.length) {
+        return res.json({ msg: 'user not found'})
       }
-      res.json({ user });
+      res.json({ user })
     })
-    .catch((err) => res.status(500).json({ err }));
+    .catch(err => res.status(500).json({ err }));
 };
 
 // update a user's info
@@ -174,10 +142,10 @@ const update = (req, res) => {
       lastname,
       role,
     },
-    { where: { id } },
+    { where: { id } }
   )
-    .then((user) => res.status(200).json({ user }))
-    .catch((err) => res.status(500).json({ err }));
+    .then(user => res.status(200).json({ user }))
+    .catch(err => res.status(500).json({ err }));
 };
 
 // delete a user
@@ -186,15 +154,14 @@ const deleteUser = (req, res) => {
 
   User.destroy({ where: { id } })
     .then(() => res.status.json({ msg: 'User has been deleted successfully!' }))
-    .catch((err) => res.status(500).json({ msg: 'Failed to delete!' }));
+    .catch(err => res.status(500).json({ msg: 'Failed to delete!' }));
 };
 
-export {
-  create,
-  login,
-  findAllUsers,
-  findById,
-  update,
-  deleteUser,
-  getUserProfile,
-};
+export { 
+    create, 
+    login, 
+    findAllUsers, 
+    findById, 
+    update, 
+    deleteUser 
+}

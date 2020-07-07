@@ -25,8 +25,6 @@ models.sequelize.sync().then(() => {
   console.log('Drop and Resync with {force: true}');
 });
 
-
-
 // passport middleware
 app.use(passport.initialize());
 
@@ -37,7 +35,6 @@ require('./config/passport')(passport);
 app.get('/', (req, res) => res.send('Hello my World'));
 
 require('./routes/user.js')(app);
-require('./routes/disasters.js')(app);
 
 //create a server
 var server = app.listen(port, function() {
