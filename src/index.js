@@ -8,7 +8,7 @@ const app = express();
 
 app.use(bodyParser.json());
 
-let port = process.env.PORT || 8080;
+let port = process.env.PORT || 34567;
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -35,6 +35,7 @@ require('./config/passport')(passport);
 app.get('/', (req, res) => res.send('Hello my World'));
 
 require('./routes/user.js')(app);
+require('./routes/policyClass.js')(app);
 
 //create a server
 var server = app.listen(port, function() {
