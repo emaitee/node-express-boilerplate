@@ -20,7 +20,7 @@
     "ejs": "^2.6.1",
     "eslint": "^5.16.0",
     "express": "^4.16.4",
-    "forever-monitor": "^1.7.1",
+    "forever-monitor": "^3.0.3",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^1.6.5",
     "passport": "^0.4.0",
